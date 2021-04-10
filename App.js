@@ -30,6 +30,7 @@ const App = ({navigation}) => {
     password: null,
     userToken: null,
     isLoading: true,
+    // showPinLock: false,
   };
 
   const loginReducer = (prevState, action) => {
@@ -39,6 +40,7 @@ const App = ({navigation}) => {
           ...prevState,
           userToken: action.token,
           isLoading: false,
+          // showPinLock: true,
         };
       case 'LOGIN':
         return {
@@ -46,10 +48,20 @@ const App = ({navigation}) => {
           userName: action.id,
           userToken: action.token,
           isLoading: false,
+          // showPinLock: true,
         };
       case 'LOGOUT':
         return {
           ...prevState,
+          // userName: null,
+          // userToken: null,
+          // userName: action.id,
+          // userToken: action.token,
+          isLoading: false,
+          // showPinLock: true,
+        };
+      case 'FORGOT_PASSWORD':
+        return {
           userName: null,
           userToken: null,
           isLoading: false,
@@ -69,6 +81,7 @@ const App = ({navigation}) => {
           try {
             userToken = 'hccik';
             await AsyncStorage.setItem('userToken', userToken);
+            setShowPinLock(true);
             showChoosePinLock();
           } catch (e) {
             console.log(e);
@@ -79,7 +92,10 @@ const App = ({navigation}) => {
       logOut: async () => {
         try {
           userToken = 'hccik';
-          await AsyncStorage.removeItem('userToken');
+          // await AsyncStorage.removeItem('userToken');
+          setGoToHome(false);
+          setShowPinLock(true);
+          setPinCodeStatus('enter');
         } catch (e) {
           console.log(e);
         }
@@ -104,7 +120,7 @@ const App = ({navigation}) => {
       }
       dispatch({type: 'RETRIEVE_TOKEN', token: userToken});
       // dispatch({type: 'LOGOUT'});
-    });
+    },1000);
   }, []);
 
   //MPIN SCREEN FUNCTIONS
@@ -113,7 +129,7 @@ const App = ({navigation}) => {
   const [goToHome, setGoToHome] = useState(false);
 
   const showChoosePinLock = () => {
-    setShowPinLock(true);
+    // setShowPinLock(true);
     setPinCodeStatus('choose');
   };
   // showEnterPinLock = () => {};
@@ -149,7 +165,11 @@ const App = ({navigation}) => {
             )}
             {goToHome && (
               <Stack.Navigator>
-                <Stack.Screen name="Home" component={Home} />
+                <Stack.Screen
+                  name="Home"
+                  component={Home}
+                  func={() => setShowPinLock(true)}
+                />
               </Stack.Navigator>
             )}
           </>

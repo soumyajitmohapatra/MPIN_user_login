@@ -6,9 +6,14 @@ import {AuthContext} from './context';
 const Home = () => {
   const {logOut} = useContext(AuthContext);
   return (
-    <View>
+    <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
       <Text>Hii</Text>
-      <Button title="logout" onPress={() => logOut()} />
+      <View style={{width: '50%', margin: 10}}>
+        <Button title="logout" onPress={() => logOut()} />
+      </View>
+      <View>
+        <Button title="Forgotten your Password"  />
+      </View>
     </View>
   );
 };
